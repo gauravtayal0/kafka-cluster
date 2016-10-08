@@ -22,7 +22,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     kafka.vm.provision :chef_solo do |chef|
       chef.add_recipe "kafka::install_broker"
       chef.add_recipe "kafka::start_single_broker"
-      chef.add_recipe "kafka::setup_alert"
 
       chef.json = { 
         :java => {
@@ -46,7 +45,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     kafka.vm.provision :chef_solo do |chef|
       chef.add_recipe "kafka::install_broker"
       chef.add_recipe "kafka::start_single_broker"
-      chef.add_recipe "kafka::setup_alert"
 
       chef.json = {
         :java => {

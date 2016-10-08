@@ -1,0 +1,12 @@
+tickTime=2000
+dataDir=/tmp/zookeeper
+# the port at which the clients will connect
+clientPort=2181
+# disable the per-ip limit on the number of connections since this is a non-production config
+initLimit=5
+syncLimit=2
+<% seen = [] %>
+<% cnt = 0 %>
+<% node[:kafka][:node_list].each do |instance_name, ip| -%><% if !seen.include?(instance_name) %>
+<%= "server.#{cnt}=#{instance_name}:2888:3888" %>
+<% seen << instance_name %><% cnt += 1 %><% end %><%- end %>

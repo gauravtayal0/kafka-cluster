@@ -1,0 +1,1 @@
+<% cnt = 0 %><% node[:kafka][:node_list].each do |instance_name, ip| -%><% if (instance_name == node[:kafka][:hostname]) -%><%= cnt %><% end -%><% cnt += 1 %><% end %>
