@@ -1,0 +1,66 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+VAGRANTFILE_API_VERSION = "2"
+
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+  # Define global vbox params up-front
+  config.vm.provider "virtualbox" do |vb|
+    vb.customize ["modifyvm", :id, "--memory", "1024"]
+  end
+
+  # Define global Chef params up front
+  config.omnibus.chef_version = "12.0" #user chef_version 12.0 or above
+  config.berkshelf.enabled = true
+  config.berkshelf.berksfile_path = "Berksfile"
+  
+#defining kafka vagrant machine (ubuntu)
+  config.vm.define "kafka1" do |kafka|
+    kafka.vm.box = "precise64"
+    kafka.vm.network "private_network", ip: "192.168.1.10"
+    kafka.vm.hostname = "kafka1"
+    kafka.vm.provision :chef_solo do |chef|
+      chef.add_recipe "kafka::install_broker"
+      chef.add_recipe "kafka::start_single_broker"
+      chef.add_recipe "kafka::setup_alert"
+
+      chef.json = { 
+        :java => {
+          :install_flavor => "oracle",
+          :oracle => {
+            :accept_oracle_download_terms => true
+          },
+          :jdk_version => 7
+        },
+        :kafka => {
+          :hostname => "kafka1"
+        }
+      }
+    end
+  end
+
+  config.vm.define "kafka2" do |kafka|
+    kafka.vm.box = "precise64"
+    kafka.vm.network "private_network", ip: "192.168.1.11"
+    kafka.vm.hostname = "kafka2"
+    kafka.vm.provision :chef_solo do |chef|
+      chef.add_recipe "kafka::install_broker"
+      chef.add_recipe "kafka::start_single_broker"
+      chef.add_recipe "kafka::setup_alert"
+
+      chef.json = {
+        :java => {
+          :install_flavor => "oracle",
+          :oracle => {
+            :accept_oracle_download_terms => true
+          },
+          :jdk_version => 7
+        },
+        :kafka => {
+          :hostname => "kafka2"
+        }
+      }
+    end
+  end
+
+end
