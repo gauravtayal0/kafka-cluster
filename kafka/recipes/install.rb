@@ -1,5 +1,5 @@
 kafka_user = node[:kafka][:username]
-install_dir = node[:kafka][:install_dir]
+install_dir = node[:kafka][:home_dir]
 kafka_dir = install_dir + "/kafka_2.10-0.8.1.1"
 kafka_already_installed = File.exists?(kafka_dir)
 
@@ -19,7 +19,7 @@ directory install_dir do
 end
 
 execute "Download Kafka binary" do
-  command "wget '#{node[:kafka][:download_mirror]}'"
+  command "wget '#{node[:kafka][:mirrors]}'"
   cwd install_dir
   user kafka_user
   not_if { kafka_already_installed }

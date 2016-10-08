@@ -1,7 +1,7 @@
 include_recipe "java::default"
 
 kafka_user = node[:kafka][:username]
-kafka_dir = node[:kafka][:install_dir] + "/kafka_2.10-0.8.1.1"
+kafka_dir = node[:kafka][:home_dir] + "/kafka_2.10-0.8.1.1"
 log_dir = node[:kafka][:log_dir]
 max_heap = node[:kafka][:max_heap]
 
